@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b38cd9f84bc18494183e969198c24e46, type: 3}
+  m_Name: Wave0
+  m_EditorClassIdentifier: 
+  waves:
+  - enemiesPrefabs:
+    - {fileID: 6052789413733157412, guid: d61c6d71cdac6da40854226746be5d29, type: 3}
+    - {fileID: 2091283703640113492, guid: 6d556d0461483974dbd9224a7f99b65e, type: 3}
+    totalEnemies: 5
+    maxConcurrentEnemies: 3
+    delayBetweenSpawns: 3.5
+    delayBeforeFirstSpawn: 3
+    spawnOnStart: 1
+  - enemiesPrefabs:
+    - {fileID: 6052789413733157412, guid: d61c6d71cdac6da40854226746be5d29, type: 3}
+    - {fileID: 2091283703640113492, guid: 6d556d0461483974dbd9224a7f99b65e, type: 3}
+    totalEnemies: 3
+    maxConcurrentEnemies: 3
+    delayBetweenSpawns: 3.5
+    delayBeforeFirstSpawn: 3
+    spawnOnStart: 1
+  - enemiesPrefabs:
+    - {fileID: 6052789413733157412, guid: d61c6d71cdac6da40854226746be5d29, type: 3}
+    - {fileID: 2091283703640113492, guid: 6d556d0461483974dbd9224a7f99b65e, type: 3}
+    totalEnemies: 10
+    maxConcurrentEnemies: 3
+    delayBetweenSpawns: 3.5
+    delayBeforeFirstSpawn: 3
+    spawnOnStart: 1
+  delayBetweenWaves: 4
