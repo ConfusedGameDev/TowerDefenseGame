@@ -4,7 +4,7 @@ using UnityEngine;
 public class BaseBullet : MonoBehaviour
 {
     Rigidbody rb;
-
+    [SerializeField] float lifeTime=3f;
     public void addForce(Vector3 direction, float speed=30,  ForceMode forceMode= ForceMode.Impulse)
     {
         if (rb == null)
@@ -17,6 +17,12 @@ public class BaseBullet : MonoBehaviour
     void Start()
     {
         rb= GetComponent<Rigidbody>();
+        Destroy(gameObject, lifeTime);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Destroy(gameObject);
     }
 
     // Update is called once per frame

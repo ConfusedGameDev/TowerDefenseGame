@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 2311059239385624712}
   - component: {fileID: 6829681009235135825}
   - component: {fileID: 6941960714712617551}
-  m_Layer: 0
+  - component: {fileID: 3343765566469924066}
+  m_Layer: 8
   m_Name: BaseBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  - {fileID: 2100000, guid: e42ee94664d2e2e4b837626a0a683bd1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -144,3 +145,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a310154ab185d364b840bbc9bc1476c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lifeTime: 3
+--- !u!33 &3343765566469924066
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4271421663854025765}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
