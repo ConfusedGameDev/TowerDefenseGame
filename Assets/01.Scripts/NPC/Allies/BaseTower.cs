@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+[RequireComponent(typeof(SphereCollider))]
 public class BaseTower : MonoBehaviour
 {
     [BoxGroup("Tower Setup ")]
@@ -25,14 +26,38 @@ public class BaseTower : MonoBehaviour
     private Coroutine shootingCoroutine;
     private bool targetInRange = true;
 
-    [SerializeField] List<GameObject> enemies= new List<GameObject>();
-    
+    [SerializeField] List<BaseEnemy> enemies= new List<BaseEnemy>();
+    [SerializeField] float rotationSpeed = 1f;
+    SphereCollider spCollider;
+    public LayerMask enemyLM;
+    bool isCoolingDown;
     void Start()
     {
-
-        enemies.AddRange(GameObject.FindGameObjectsWithTag("Enemy").OrderBy(x=> Vector3.Distance(head.position,x.transform.position)));
-        
+        spCollider = GetComponent<SphereCollider>();
+        spCollider.isTrigger = true;
+        spCollider.radius = attackRange;        
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.TryGetComponent<BaseEnemy>(out BaseEnemy enemy))
+        {
+            enemies.Add(enemy);
+            if (target == null && !isCoolingDown)
+                target = enemy.transform;
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.TryGetComponent<BaseEnemy>(out BaseEnemy enemy))
+        {
+            if(enemies.Contains(enemy))
+                enemies.Remove(enemy);
+            if(target== enemy.transform)
+                target= enemies.Count > 0? getRandomTarget():null;
+        }
+    }
+
 
     public void UpdateTarget(Transform target)
     {
@@ -41,24 +66,37 @@ public class BaseTower : MonoBehaviour
      
     void Update()
     {
-        
-        if(head && target && shootPoint && projectile )
-        {
-            targetInRange=  Vector3.Distance(head.position, target.position)<=attackRange;
-            if (targetInRange)
-            {
-                head.LookAt(target);
-                if(shootingCoroutine== null)
-                {
-                    shootingCoroutine = StartCoroutine(ShootProjectile());
-                }
-            }
 
-            if(Input.GetKeyDown(KeyCode.Space))
+        if (head && target && shootPoint && projectile && !isCoolingDown)
+        {
+            FaceTarget(target.position);
+            Ray r = new Ray(shootPoint.position, shootPoint.forward);
+
+            if (Physics.Raycast(r, out RaycastHit hit, 100, enemyLM))
             {
                 Attack();
+                StartCoroutine(coolDown());
             }
+
         }
+        else
+        {
+            FaceTarget(head.position + transform.forward * 10f);
+        }
+    }
+    IEnumerator coolDown()
+    {
+        isCoolingDown= true;
+        yield return new WaitForSeconds(fireRate);
+        isCoolingDown = false;
+        target= getRandomTarget();
+    }
+    private void FaceTarget(Vector3 target)
+    {
+        var direction = target - head.transform.position;
+       // direction.y = 0;
+        Quaternion targetRoataion = Quaternion.LookRotation(direction);
+        head.transform.rotation = Quaternion.Lerp(head.transform.rotation, targetRoataion, Time.deltaTime * rotationSpeed);
     }
 
     public virtual void Attack()
@@ -70,30 +108,27 @@ public class BaseTower : MonoBehaviour
         }
     }
 
-    public virtual IEnumerator ShootProjectile()
+    Transform getRandomTarget()
     {
-        Attack();
-        yield return new WaitForSeconds(fireRate); 
-        if (targetInRange)
+        for (int i = 0; i< enemies.Count; i++)
         {
-            
-            shootingCoroutine = StartCoroutine(ShootProjectile());
-
+            if(enemies[i] == null)
+            {
+                enemies.RemoveAt(i);
+            }
         }
-        else
-        {
-            shootingCoroutine= null;
-        }
+        var randomEnemy= enemies.Count>0? enemies[Random.Range(0,enemies.Count)]:null;
 
+        return randomEnemy ? randomEnemy.transform : null ;
     }
+   
     private void OnDrawGizmos()
     {
         if (head && target)
         {
             Gizmos.color = Color.white;
             Gizmos.DrawWireSphere(transform.position, attackRange);
-            Gizmos.color = targetInRange? Color.green: Color.red;
-            Gizmos.DrawLine(head.position, target.position);
+            
         }
     }
 }

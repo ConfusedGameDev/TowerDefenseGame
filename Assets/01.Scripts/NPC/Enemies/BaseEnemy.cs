@@ -1,12 +1,15 @@
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using System.Collections;
 using System.ComponentModel;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using ReadOnlyAttribute = Sirenix.OdinInspector.ReadOnlyAttribute;
 
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class BaseEnemy : MonoBehaviour
+public class BaseEnemy : MonoBehaviour, IDamageable
 {
     [SerializeField]
 
@@ -14,12 +17,19 @@ public class BaseEnemy : MonoBehaviour
     private int currentWP = 0;
     private Transform currentWaypoint;
 
-    public float rotationSpeed = 10f;
+    [SerializeField] float rotationSpeed = 10f;
 
-    public float attackDamage = 1f;
-    public float deadDelay = 0.2f;
+    [SerializeField] float attackDamage = 1f;
+    [SerializeField] float deadDelay = 0.2f;
 
     public EnemyMG enemyParent;
+
+    [field:SerializeField]public float maxHealth { get; set; }
+
+ 
+    [ShowInInspector] [ReadOnly]
+    public float currentHealth { get; set ; }
+ 
     public void updateTarget(Transform newTarget)
     {
         currentWaypoint = newTarget;
@@ -80,6 +90,7 @@ public class BaseEnemy : MonoBehaviour
         agent.updateRotation = false;
         agent.avoidancePriority = Mathf.RoundToInt(agent.speed * 10);
         getNextWaypoint();
+        currentHealth = maxHealth;
         
     }
 
@@ -95,4 +106,18 @@ public class BaseEnemy : MonoBehaviour
             }
         }
     }
+
+    public void onGetDamage(float damage)
+    {
+        currentHealth-= damage;
+        if (currentHealth <= 0)
+            onDead();
+    }
+
+    public void onDead()
+    {
+        DestroyEnemy();
+    }
+
+     
 }

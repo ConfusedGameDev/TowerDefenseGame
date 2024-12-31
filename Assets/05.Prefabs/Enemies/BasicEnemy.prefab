@@ -479,19 +479,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 444ea26e6be431a49be81be0d774227b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waypoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  currentWaypoint: {fileID: 0}
-  debug: 1
+  agent: {fileID: 0}
   rotationSpeed: 10
   attackDamage: 3
   deadDelay: 0.2
+  enemyParent: {fileID: 0}
+  <maxHealth>k__BackingField: 10
 --- !u!54 &2978465780274420237
 Rigidbody:
   m_ObjectHideFlags: 0
