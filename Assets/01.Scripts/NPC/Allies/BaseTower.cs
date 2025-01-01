@@ -8,7 +8,7 @@ using System.Linq;
 public class BaseTower : MonoBehaviour
 {
     [BoxGroup("Tower Setup ")]
-    [SerializeField] Transform target;
+    [SerializeField] protected Transform target;
     [BoxGroup("Tower Setup ")]
     [SerializeField] protected Transform head;
     [BoxGroup("Tower Setup ")]
@@ -16,12 +16,20 @@ public class BaseTower : MonoBehaviour
     [BoxGroup("Tower Setup ")]
     [SerializeField] float attackRange = 3f;
     [BoxGroup("Tower Setup ")]
-    [SerializeField] float fireRate = 3f;
+    [SerializeField] protected float fireRate = 3f;
+
+    [BoxGroup("Tower Visuals Setup")]
+    [SerializeField] private Renderer[] glowingRenderers;
+    [BoxGroup("Tower Visuals Setup")]
+    [Range(0f, 25f)]
+    [SerializeField] private float maxGlow = 25f;
 
     [BoxGroup("Tower Projectile")]
     public BaseBullet projectile;
     [BoxGroup("Tower Projectile")]
     public float projectileSpeed = 100f;
+
+    [SerializeField] protected float damage = 7f;
 
     private Coroutine shootingCoroutine;
     private bool targetInRange = true;
@@ -32,11 +40,16 @@ public class BaseTower : MonoBehaviour
     public LayerMask enemyLM;
     bool isCoolingDown;
     protected Vector3 attackPoint;
+
+
+    int glowID = Shader.PropertyToID("_EmmisionIntensity");
     protected virtual void Start()
     {
         spCollider = GetComponent<SphereCollider>();
         spCollider.isTrigger = true;
-        spCollider.radius = attackRange;        
+        spCollider.radius = attackRange;
+        isCoolingDown = true;
+        StartCoroutine(coolDown());
     }
 
     private void OnTriggerEnter(Collider other)
@@ -65,7 +78,7 @@ public class BaseTower : MonoBehaviour
         this.target = target;
     }
      
-    void Update()
+    protected virtual void Update()
     {
 
         if (head && target && shootPoint && projectile && !isCoolingDown)
@@ -75,21 +88,47 @@ public class BaseTower : MonoBehaviour
 
             if (Physics.Raycast(r, out RaycastHit hit, 100, enemyLM))
             {
-                attackPoint= hit.point;
+                isCoolingDown = true;
+                attackPoint = hit.point;
                 Attack();
                 StartCoroutine(coolDown());
             }
 
         }
-        else
+        else if(!isCoolingDown)
         {
             FaceTarget(head.position + transform.forward * 10f);
         }
     }
     protected virtual IEnumerator coolDown()
     {
-        isCoolingDown= true;
-        yield return new WaitForSeconds(fireRate);
+
+        var delta = 0f;
+        if (glowingRenderers!=null)
+        {
+            foreach (var r in glowingRenderers)
+            {
+                r.material.SetFloat(glowID, 0);
+            }
+        }
+            
+
+        while (delta<fireRate)
+        {
+            yield return null;
+            if (glowingRenderers != null)
+            {
+                foreach (var r in glowingRenderers)
+                {
+                    r.material.SetFloat(glowID, maxGlow * (delta / fireRate));
+                }
+            }
+            
+            delta += Time.deltaTime;
+            
+        }
+       
+
         isCoolingDown = false;
         target= getRandomTarget();
     }

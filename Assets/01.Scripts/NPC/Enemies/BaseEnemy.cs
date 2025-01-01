@@ -29,7 +29,8 @@ public class BaseEnemy : MonoBehaviour, IDamageable
  
     [ShowInInspector] [ReadOnly]
     public float currentHealth { get; set ; }
- 
+
+    public GameObject onHitFX;
     public void updateTarget(Transform newTarget)
     {
         currentWaypoint = newTarget;
@@ -109,6 +110,11 @@ public class BaseEnemy : MonoBehaviour, IDamageable
 
     public void onGetDamage(float damage)
     {
+        if(onHitFX)
+        {
+            var hitFX = Instantiate(onHitFX, transform.position, Quaternion.identity);
+            hitFX.transform.parent = transform;
+        }
         currentHealth-= damage;
         if (currentHealth <= 0)
             onDead();
