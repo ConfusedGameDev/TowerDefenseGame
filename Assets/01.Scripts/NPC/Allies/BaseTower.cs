@@ -10,9 +10,9 @@ public class BaseTower : MonoBehaviour
     [BoxGroup("Tower Setup ")]
     [SerializeField] Transform target;
     [BoxGroup("Tower Setup ")]
-    [SerializeField] Transform head;
+    [SerializeField] protected Transform head;
     [BoxGroup("Tower Setup ")]
-    [SerializeField] Transform shootPoint;
+    [SerializeField] protected Transform shootPoint;
     [BoxGroup("Tower Setup ")]
     [SerializeField] float attackRange = 3f;
     [BoxGroup("Tower Setup ")]
@@ -31,7 +31,8 @@ public class BaseTower : MonoBehaviour
     SphereCollider spCollider;
     public LayerMask enemyLM;
     bool isCoolingDown;
-    void Start()
+    protected Vector3 attackPoint;
+    protected virtual void Start()
     {
         spCollider = GetComponent<SphereCollider>();
         spCollider.isTrigger = true;
@@ -74,6 +75,7 @@ public class BaseTower : MonoBehaviour
 
             if (Physics.Raycast(r, out RaycastHit hit, 100, enemyLM))
             {
+                attackPoint= hit.point;
                 Attack();
                 StartCoroutine(coolDown());
             }
@@ -84,7 +86,7 @@ public class BaseTower : MonoBehaviour
             FaceTarget(head.position + transform.forward * 10f);
         }
     }
-    IEnumerator coolDown()
+    protected virtual IEnumerator coolDown()
     {
         isCoolingDown= true;
         yield return new WaitForSeconds(fireRate);
@@ -95,7 +97,7 @@ public class BaseTower : MonoBehaviour
     {
         var direction = target - head.transform.position;
        // direction.y = 0;
-        Quaternion targetRoataion = Quaternion.LookRotation(direction);
+        Quaternion targetRoataion = Quaternion.LookRotation(direction.normalized);
         head.transform.rotation = Quaternion.Lerp(head.transform.rotation, targetRoataion, Time.deltaTime * rotationSpeed);
     }
 
