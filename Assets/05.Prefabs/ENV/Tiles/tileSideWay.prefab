@@ -120,6 +120,7 @@ GameObject:
   - component: {fileID: 8253058530518498188}
   - component: {fileID: 773979715132628691}
   - component: {fileID: 856476544787843466}
+  - component: {fileID: 3207229746241424556}
   m_Layer: 10
   m_Name: tileSideWay
   m_TagString: Untagged
@@ -217,3 +218,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.5, y: 1, z: 1}
   m_Center: {x: 0.25, y: 0, z: 0}
+--- !u!114 &3207229746241424556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8782532807492226891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af3d2b9c657d3f5418924a317d345a1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mFilter: {fileID: 0}
+  mRenderer: {fileID: 0}
+  meshes: []
+  tileType: 10

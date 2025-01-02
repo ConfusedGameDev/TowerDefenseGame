@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4207617039979194482}
   - component: {fileID: 1577533189617398673}
   - component: {fileID: 8493274507884695131}
+  - component: {fileID: -2495387959695403760}
   m_Layer: 11
   m_Name: tile_hill3
   m_TagString: Untagged
@@ -109,3 +110,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -2835245020478433565, guid: e4f015fced1635b4faf93701b2d56f47, type: 3}
+--- !u!114 &-2495387959695403760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7467484121098250672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af3d2b9c657d3f5418924a317d345a1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mFilter: {fileID: 0}
+  mRenderer: {fileID: 0}
+  meshes: []
+  tileType: 4
