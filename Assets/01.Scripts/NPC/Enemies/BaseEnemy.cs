@@ -78,8 +78,8 @@ public class BaseEnemy : MonoBehaviour, IDamageable
     void getNextWaypoint()
     {
 
-        currentWaypoint = WaypointMG.Instance.getNextWaypoint(currentWP);
-        totalDistance= WaypointMG.Instance.getTotalDistance(currentWP, agent.transform.position);  
+        currentWaypoint = enemyParent.getNextWaypoint(currentWP);
+        totalDistance= enemyParent.getTotalDistance(currentWP, agent.transform.position);  
         if(currentWaypoint !=null)
         {
             updateTarget(currentWaypoint);

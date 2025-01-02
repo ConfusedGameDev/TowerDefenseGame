@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using UnityEngine;
 
-public class WaypointMG : SingletonComponent<WaypointMG>
+public class WaypointMG : MonoBehaviour
 {
     [SerializeField] private Transform[] waypoints;
      public bool debug = true;

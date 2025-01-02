@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
+
+[RequireComponent(typeof(WaypointMG))]
 public class EnemyMG : MonoBehaviour
 {
 
@@ -14,6 +16,11 @@ public class EnemyMG : MonoBehaviour
     List<BaseEnemy> currentEnemies = new List<BaseEnemy>();
     Wave currentWaveData;
     int currentWaveSpawnedEnemies = 0;
+    WaypointMG waypointMG;
+
+    public Transform getNextWaypoint(int x)=> waypointMG? waypointMG.getNextWaypoint(x): null;
+    public float getTotalDistance(int x, Vector3 pos) => waypointMG ? waypointMG.getTotalDistance(x, pos) : 0f;
+
     public void onEnemyKilled(BaseEnemy killedUnit)
     {
         if (currentEnemies.Contains(killedUnit))
@@ -53,6 +60,7 @@ public class EnemyMG : MonoBehaviour
     }
     IEnumerator Start()
     {
+        waypointMG = GetComponent<WaypointMG>();
         if (!waveManager)
         {
             Debug.LogError("No wave manager Found");
@@ -77,7 +85,7 @@ public class EnemyMG : MonoBehaviour
         {
             if(waveManager.allWavesCleared(currentWave))
             {
-                Debug.Log("Level Cleared");
+                LevelMG.Instance.onPortalDeactivated(this);
             }
             else
             {
