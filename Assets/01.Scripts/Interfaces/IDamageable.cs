@@ -3,12 +3,8 @@ using System;
 using UnityEngine;
 
 public interface IDamageable 
-{
-    [SerializeField]
-    public float maxHealth { get; set; }
-    [SerializeField]
-    public float currentHealth { get; set;  }
-    public void onGetDamage(float damage);
-    public void onDead();
+{   
+    public void TakeDamage(float damage);
+    public void Die();
      
 }

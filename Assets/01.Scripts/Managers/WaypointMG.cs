@@ -38,4 +38,19 @@ public class WaypointMG : SingletonComponent<WaypointMG>
             return null;
         }
     }
+
+    public float getTotalDistance(int currentWP, Vector3 startPos)
+    {
+        float totalDistance = 0;
+        if ( currentWP < waypoints.Length)
+        {
+            totalDistance += Vector3.Distance(startPos, waypoints[currentWP].position);
+            for (int i = currentWP; i < waypoints.Length-1; i++)
+            {
+                totalDistance += Vector3.Distance(waypoints[i].position, waypoints[i + 1].position);
+            }
+           
+        }
+        return totalDistance;
+    }
 }

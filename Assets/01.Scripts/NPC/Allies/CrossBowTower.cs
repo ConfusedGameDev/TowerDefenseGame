@@ -39,7 +39,7 @@ public class CrossBowTower : BaseTower
         {
             if (target.TryGetComponent<IDamageable>(out IDamageable damageable))
             {
-                damageable.onGetDamage(damage);
+                damageable.TakeDamage(damage);
             }
         }
         Debug.DrawLine(shootPoint.position, attackPoint, Color.yellow);

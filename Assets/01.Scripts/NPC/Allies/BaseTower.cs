@@ -34,14 +34,14 @@ public class BaseTower : MonoBehaviour
     private Coroutine shootingCoroutine;
     private bool targetInRange = true;
 
-    [SerializeField] List<BaseEnemy> enemies= new List<BaseEnemy>();
+    [SerializeField] List<BaseEnemy> enemies = new List<BaseEnemy>();
     [SerializeField] float rotationSpeed = 1f;
     SphereCollider spCollider;
-    public LayerMask enemyLM;
+    public LayerMask enemyLM, obstacleMask;
     bool isCoolingDown;
     protected Vector3 attackPoint;
 
-
+    [SerializeField] EnemyType priorityTargetType;
     int glowID = Shader.PropertyToID("_EmmisionIntensity");
     protected virtual void Start()
     {
@@ -54,7 +54,7 @@ public class BaseTower : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.TryGetComponent<BaseEnemy>(out BaseEnemy enemy))
+        if (other.gameObject.TryGetComponent<BaseEnemy>(out BaseEnemy enemy))
         {
             enemies.Add(enemy);
             if (target == null && !isCoolingDown)
@@ -65,10 +65,10 @@ public class BaseTower : MonoBehaviour
     {
         if (other.gameObject.TryGetComponent<BaseEnemy>(out BaseEnemy enemy))
         {
-            if(enemies.Contains(enemy))
+            if (enemies.Contains(enemy))
                 enemies.Remove(enemy);
-            if(target== enemy.transform)
-                target= enemies.Count > 0? getRandomTarget():null;
+            if (target == enemy.transform)
+                target = enemies.Count > 0 ? getNextTarget() : null;
         }
     }
 
@@ -77,7 +77,7 @@ public class BaseTower : MonoBehaviour
     {
         this.target = target;
     }
-     
+
     protected virtual void Update()
     {
 
@@ -85,17 +85,24 @@ public class BaseTower : MonoBehaviour
         {
             FaceTarget(target.position);
             Ray r = new Ray(shootPoint.position, shootPoint.forward);
+            if (Physics.Raycast(r, out RaycastHit hito, 100, obstacleMask)) return;
 
             if (Physics.Raycast(r, out RaycastHit hit, 100, enemyLM))
             {
+                if (hit.transform != target) return;
                 isCoolingDown = true;
-                attackPoint = hit.point;
+                if (hit.transform.TryGetComponent<BaseEnemy>(out BaseEnemy enemy))
+                {
+                    attackPoint = enemy.getCenterPoint();
+                }
+                else
+                    attackPoint = hit.point;
                 Attack();
                 StartCoroutine(coolDown());
             }
 
         }
-        else if(!isCoolingDown)
+        else if (!isCoolingDown)
         {
             FaceTarget(head.position + transform.forward * 10f);
         }
@@ -104,16 +111,16 @@ public class BaseTower : MonoBehaviour
     {
 
         var delta = 0f;
-        if (glowingRenderers!=null)
+        if (glowingRenderers != null)
         {
             foreach (var r in glowingRenderers)
             {
                 r.material.SetFloat(glowID, 0);
             }
         }
-            
 
-        while (delta<fireRate)
+
+        while (delta < fireRate)
         {
             yield return null;
             if (glowingRenderers != null)
@@ -123,19 +130,19 @@ public class BaseTower : MonoBehaviour
                     r.material.SetFloat(glowID, maxGlow * (delta / fireRate));
                 }
             }
-            
+
             delta += Time.deltaTime;
-            
+
         }
-       
+
 
         isCoolingDown = false;
-        target= getRandomTarget();
+        target = getNextTarget();
     }
     private void FaceTarget(Vector3 target)
     {
         var direction = target - head.transform.position;
-       // direction.y = 0;
+        // direction.y = 0;
         Quaternion targetRoataion = Quaternion.LookRotation(direction.normalized);
         head.transform.rotation = Quaternion.Lerp(head.transform.rotation, targetRoataion, Time.deltaTime * rotationSpeed);
     }
@@ -149,27 +156,31 @@ public class BaseTower : MonoBehaviour
         }
     }
 
-    Transform getRandomTarget()
+    Transform getNextTarget()
     {
-        for (int i = 0; i< enemies.Count; i++)
+        for (int i = 0; i < enemies.Count; i++)
         {
-            if(enemies[i] == null)
+            if (enemies[i] == null)
             {
                 enemies.RemoveAt(i);
             }
         }
-        var randomEnemy= enemies.Count>0? enemies[Random.Range(0,enemies.Count)]:null;
-
-        return randomEnemy ? randomEnemy.transform : null ;
+        if (enemies.Count != 0)
+        {
+            enemies = enemies.OrderByDescending(x => x.totalDistance).ToList();
+            var priorityEnemies = enemies.Where(x => x.enemyType == priorityTargetType).ToList();
+            return priorityEnemies.Count > 0 ? priorityEnemies[^1].transform : enemies[^1].transform;
+        }
+        return null;
     }
-   
+
     private void OnDrawGizmos()
     {
         if (head && target)
         {
             Gizmos.color = Color.white;
             Gizmos.DrawWireSphere(transform.position, attackRange);
-            
+
         }
     }
 }

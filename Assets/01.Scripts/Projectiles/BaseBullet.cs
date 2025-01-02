@@ -27,7 +27,7 @@ public class BaseBullet : MonoBehaviour
         Destroy(gameObject);
         if(collision.gameObject.TryGetComponent<IDamageable>(out IDamageable damageable))
         {
-            damageable.onGetDamage(damage);
+            damageable.TakeDamage(damage);
         }
     }
 
@@ -36,7 +36,7 @@ public class BaseBullet : MonoBehaviour
         Destroy(gameObject);
         if (other.gameObject.TryGetComponent<IDamageable>(out IDamageable damageable))
         {
-            damageable.onGetDamage(damage);
+            damageable.TakeDamage(damage);
         }
 
     }

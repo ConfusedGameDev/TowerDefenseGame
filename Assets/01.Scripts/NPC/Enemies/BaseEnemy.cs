@@ -8,6 +8,13 @@ using UnityEngine.AI;
 using ReadOnlyAttribute = Sirenix.OdinInspector.ReadOnlyAttribute;
 
 
+public enum EnemyType
+{
+    BasicEnemy,
+    FastEnemy,
+    FlyingEnemy, 
+    NONE
+}
 [RequireComponent(typeof(NavMeshAgent))]
 public class BaseEnemy : MonoBehaviour, IDamageable
 {
@@ -24,6 +31,7 @@ public class BaseEnemy : MonoBehaviour, IDamageable
 
     public EnemyMG enemyParent;
 
+    public EnemyType enemyType= EnemyType.BasicEnemy;
     [field:SerializeField]public float maxHealth { get; set; }
 
  
@@ -31,11 +39,20 @@ public class BaseEnemy : MonoBehaviour, IDamageable
     public float currentHealth { get; set ; }
 
     public GameObject onHitFX;
+
+    [ShowInInspector]
+    [ReadOnly]
+    public float totalDistance;
+    float remainingDistance;
+
+    [SerializeField] private Transform centerPoint;
+
+    public Vector3 getCenterPoint() => centerPoint ? centerPoint.position : transform.position;
     public void updateTarget(Transform newTarget)
     {
-        currentWaypoint = newTarget;
+         
 
-        if (agent)
+        if (agent && currentWaypoint)
         {
             agent.SetDestination(currentWaypoint.position);
 
@@ -60,7 +77,9 @@ public class BaseEnemy : MonoBehaviour, IDamageable
     }
     void getNextWaypoint()
     {
+
         currentWaypoint = WaypointMG.Instance.getNextWaypoint(currentWP);
+        totalDistance= WaypointMG.Instance.getTotalDistance(currentWP, agent.transform.position);  
         if(currentWaypoint !=null)
         {
             updateTarget(currentWaypoint);
@@ -105,10 +124,11 @@ public class BaseEnemy : MonoBehaviour, IDamageable
             {
                 getNextWaypoint();
             }
+            remainingDistance = totalDistance+ agent.remainingDistance;
         }
     }
 
-    public void onGetDamage(float damage)
+    public void TakeDamage(float damage)
     {
         if(onHitFX)
         {
@@ -117,10 +137,10 @@ public class BaseEnemy : MonoBehaviour, IDamageable
         }
         currentHealth-= damage;
         if (currentHealth <= 0)
-            onDead();
+            Die();
     }
 
-    public void onDead()
+    public void Die()
     {
         DestroyEnemy();
     }

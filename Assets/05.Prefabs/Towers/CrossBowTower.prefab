@@ -1506,6 +1506,10 @@ MonoBehaviour:
   enemyLM:
     serializedVersion: 2
     m_Bits: 128
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
+  priorityTargetType: 0
   anim: {fileID: 0}
   laserRenderer: {fileID: 1015561687049125711}
   laserDuration: 0.15
@@ -1691,6 +1695,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4488562970835195568}
+  - component: {fileID: 4646148538070612325}
   m_Layer: 6
   m_Name: building_1
   m_TagString: Untagged
@@ -1716,6 +1721,27 @@ Transform:
   - {fileID: 4261212368031282539}
   m_Father: {fileID: 6949217406645602283}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &4646148538070612325
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7076688876556028886}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1.9978502, z: 1}
+  m_Center: {x: 0, y: 0.4989252, z: -0}
 --- !u!1 &7129730880736066078
 GameObject:
   m_ObjectHideFlags: 0

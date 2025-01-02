@@ -288,6 +288,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   direction: {x: 1, y: 0, z: 0}
   speed: 3.5
+--- !u!1 &3006696364441233040
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3145521612152662811}
+  m_Layer: 7
+  m_Name: Ceneter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3145521612152662811
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3006696364441233040}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.186, z: -0.012}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 681854596509981374}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3607854604923131717
 GameObject:
   m_ObjectHideFlags: 0
@@ -443,6 +474,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4167990882826268162}
+  - {fileID: 3145521612152662811}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!195 &6594167562006952929
@@ -485,6 +517,9 @@ MonoBehaviour:
   deadDelay: 0.2
   enemyParent: {fileID: 0}
   <maxHealth>k__BackingField: 10
+  onHitFX: {fileID: 0}
+  totalDistance: 0
+  centerPoint: {fileID: 3145521612152662811}
 --- !u!54 &2978465780274420237
 Rigidbody:
   m_ObjectHideFlags: 0
