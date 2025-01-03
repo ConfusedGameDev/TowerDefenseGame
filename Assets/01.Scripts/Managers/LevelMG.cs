@@ -86,6 +86,10 @@ public class LevelMG : SerializedMonoBehaviour
         }
         else if (currentWaveData != null && getCurrentWaveSpawnedEnemies()  >= currentWaveData.totalEnemies && getCurrentAliveEnemies()== 0)
         {
+            foreach (var portal in getCurrentWavePortals())
+            {
+                portal.resetPortal();
+            }
             currentWave++;
             setupWave();
         }
@@ -99,6 +103,7 @@ public class LevelMG : SerializedMonoBehaviour
     }
     void setupWave()
     {
+        Debug.Log($"Setting up wave {currentWave}");    
         currentWaveData = waveManager.getWaveAtIndex(currentWave);
         if (currentWaveData == null)
         {
