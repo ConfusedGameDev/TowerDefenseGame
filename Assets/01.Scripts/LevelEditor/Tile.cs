@@ -2,6 +2,7 @@ using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.WSA;
 
 public enum TileType
 {
@@ -22,10 +23,10 @@ public enum TileType
 }
 public class Tile : MonoBehaviour
 {
-   
-    
-     public  TileType tileType;
- 
+
+
+    public TileType tileType;
+
     int idX;
     int idY;
 
@@ -36,22 +37,35 @@ public class Tile : MonoBehaviour
     }
     public int getIdX() => idX;
     public int getIdY() => idY;
-    public void changeTileType(Tile tile)
+    public Tile changeTileType(Tile tile)
     {
-        if (tile == null) return;
-       var newTile= Instantiate(tile.gameObject, transform.position, transform.rotation).GetComponent<Tile>();
-        newTile.transform.parent= transform.parent;
-        newTile.SetID(idX,idY);        
-       Selection.activeObject = newTile;
+        if (tile == null) return null;
+        var newTile = Instantiate(tile.gameObject, transform.position, transform.rotation).GetComponent<Tile>();
+        newTile.transform.parent = transform.parent;
+        newTile.SetID(idX, idY);
+        Selection.activeObject = newTile;
         gameObject.SetActive(false);
         GridBuilder.Instance.updateTile(newTile.getIdX(), newTile.getIdY(), newTile);
         GridBuilder.Instance.updateNavMesh();
+        if(gameObject)
         DestroyImmediate(gameObject);
-       
 
-          
+        return newTile;
+
+
     }
 
+    public Tile changeTileType(string tileType)
+    {
+        var tHolder = FindAnyObjectByType<TileSetHolder>();
+        var t = tHolder.getTile(tileType);
+        if (t != null)
+        {
+          return  changeTileType(t);
+        }
+
+        return null;
+    }
     public void updateName()
     {
         gameObject.name = tileType + $"({ Mathf.RoundToInt(transform.position.x)},{Mathf.RoundToInt(transform.position.z)})";

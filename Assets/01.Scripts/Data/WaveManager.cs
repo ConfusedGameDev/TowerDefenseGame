@@ -20,4 +20,14 @@ public class WaveManager : ScriptableObject
     public Wave getWaveAtIndex(int index) => index < waves.Length ? waves[index] : null;
 
     public bool allWavesCleared(int index)=> index>= waves.Length;
+
+    public BaseEnemy GetRandomEnemy(int wave)
+    {
+        if (wave<waves.Length)
+        {
+            if(waves[wave].enemiesPrefabs.Length>0)
+            return waves[wave].enemiesPrefabs[UnityEngine.Random.Range(0, waves[wave].enemiesPrefabs.Length)];
+        }
+        return null;
+    }
 }

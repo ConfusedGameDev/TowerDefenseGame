@@ -1,23 +1,29 @@
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Experimental.GlobalIllumination;
 
 
 [RequireComponent(typeof(WaypointMG))]
-public class EnemyMG : MonoBehaviour
+public class EnemyMG : SerializedMonoBehaviour
 {
 
-    [SerializeField] private WaveManager waveManager;
-    int currentWave = 0;
-    [SerializeField] private Transform spawnPoint;
+   
+    [SerializeField] public Transform spawnPoint;
 
     [SerializeField] private Transform enemiesHolder;
     List<BaseEnemy> currentEnemies = new List<BaseEnemy>();
-    Wave currentWaveData;
+    
     int currentWaveSpawnedEnemies = 0;
     WaypointMG waypointMG;
 
+
+
+    public int getCurrentEnemies() => currentEnemies.Count;
+    public int getCurrentWaveSpawnedEnemies() => currentWaveSpawnedEnemies;
+   
     public Transform getNextWaypoint(int x)=> waypointMG? waypointMG.getNextWaypoint(x): null;
     public float getTotalDistance(int x, Vector3 pos) => waypointMG ? waypointMG.getTotalDistance(x, pos) : 0f;
 
@@ -29,86 +35,28 @@ public class EnemyMG : MonoBehaviour
         }
     }
 
-    IEnumerator spawnUnit()
+    public void spawnUnit(BaseEnemy enemyToSpawn)
     {
-
-        if (currentWaveData!=null && currentEnemies.Count < currentWaveData.maxConcurrentEnemies && currentWaveSpawnedEnemies < currentWaveData.totalEnemies)
-        {
-
-            currentWaveSpawnedEnemies++;
-            int i = Random.Range(0, currentWaveData.enemiesPrefabs.Length);
-            BaseEnemy newEnemy = Instantiate(currentWaveData.enemiesPrefabs[i], spawnPoint.position, spawnPoint.rotation);
-            newEnemy.enemyParent = this;
-            newEnemy.transform.parent = enemiesHolder ? enemiesHolder : transform;
-            currentEnemies.Add(newEnemy);
-            yield return new WaitForSeconds(currentWaveData.delayBetweenSpawns);
-            StartCoroutine(spawnUnit());
-
-        }
-        else if (currentWaveData != null &&  currentWaveSpawnedEnemies >= currentWaveData.totalEnemies && currentEnemies.Count==0)
-        {
-            currentWave++;
-            setupWave();
-        }
-        else if(currentWaveData != null )
-        {
-            yield return new WaitForSeconds(currentWaveData.delayBetweenSpawns);
-            StartCoroutine(spawnUnit());
-        }
+        currentWaveSpawnedEnemies++;
+        BaseEnemy newEnemy = Instantiate(enemyToSpawn, spawnPoint.position, spawnPoint.rotation);
+        newEnemy.enemyParent = this;
+        newEnemy.transform.parent = enemiesHolder ? enemiesHolder : transform;
+        currentEnemies.Add(newEnemy);        
       
 
     }
-    IEnumerator Start()
+    void Start()
     {
         waypointMG = GetComponent<WaypointMG>();
-        if (!waveManager)
-        {
-            Debug.LogError("No wave manager Found");
-            Destroy(this);
-        }
-        setupWave();
-       
-        if (currentWaveData!=null && currentWaveData.spawnOnStart)
-        {
-            yield return new WaitForSeconds(currentWaveData.delayBeforeFirstSpawn);
-            startSpawning();
-        }
+         
     }
-    void setupWave()
+    public void resetPortal()
     {
 
         currentWaveSpawnedEnemies = 0;
-        currentWaveData = waveManager.getWaveAtIndex(currentWave);
+    }
+    
 
-        
-        if(currentWaveData==null)
-        {
-            if(waveManager.allWavesCleared(currentWave))
-            {
-                LevelMG.Instance.onPortalDeactivated(this);
-            }
-            else
-            {
-                Debug.LogError("Error getting Data");
-            }
-        }
-        else
-        {
-           StartCoroutine( prepareNextWave());
-        }
-    }
-    IEnumerator prepareNextWave()
-    {
-        yield return new WaitForSeconds(waveManager.delayBetweenWaves);        
-        StartCoroutine(spawnUnit());
-    }
-
-    void startSpawning()
-    {
-        if (spawnPoint && currentWaveData.enemiesPrefabs != null && currentWaveData.enemiesPrefabs.Length > 0)
-        {
-            StartCoroutine(spawnUnit());
-        }
-    }
+  
 
 }

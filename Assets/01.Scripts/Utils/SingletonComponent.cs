@@ -1,6 +1,8 @@
  using UnityEngine;
 using UnityEditor;
 using Unity.VisualScripting;
+
+[ExecuteAlways]
 public abstract class SingletonComponent<T> : MonoBehaviour where T : MonoBehaviour
 {
     static T _instance;
@@ -35,11 +37,15 @@ public abstract class SingletonComponent<T> : MonoBehaviour where T : MonoBehavi
                 {
                     var holder = new GameObject($"{typeof(T).Name}_Singleton", typeof(T));
                     _instance = holder.GetComponent<T>();
+                    if(Application.isPlaying)
                     DontDestroyOnLoad( holder.gameObject );
                 }
                 else
                 {
+                    if(Application.isPlaying)
                     Destroy(_instance.gameObject);
+                    else
+                        DestroyImmediate(_instance.gameObject);
                 }
                 return _instance;
             }
