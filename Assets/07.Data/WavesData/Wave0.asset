@@ -15,7 +15,6 @@ MonoBehaviour:
   waves:
   - enemiesPrefabs:
     - {fileID: 6052789413733157412, guid: d61c6d71cdac6da40854226746be5d29, type: 3}
-    - {fileID: 2091283703640113492, guid: 6d556d0461483974dbd9224a7f99b65e, type: 3}
     totalEnemies: 5
     maxConcurrentEnemies: 5
     delayBetweenSpawns: 0.5
@@ -23,7 +22,6 @@ MonoBehaviour:
     spawnOnStart: 1
   - enemiesPrefabs:
     - {fileID: 6052789413733157412, guid: d61c6d71cdac6da40854226746be5d29, type: 3}
-    - {fileID: 2091283703640113492, guid: 6d556d0461483974dbd9224a7f99b65e, type: 3}
     totalEnemies: 5
     maxConcurrentEnemies: 5
     delayBetweenSpawns: 0.5
@@ -31,7 +29,6 @@ MonoBehaviour:
     spawnOnStart: 1
   - enemiesPrefabs:
     - {fileID: 6052789413733157412, guid: d61c6d71cdac6da40854226746be5d29, type: 3}
-    - {fileID: 2091283703640113492, guid: 6d556d0461483974dbd9224a7f99b65e, type: 3}
     totalEnemies: 10
     maxConcurrentEnemies: 10
     delayBetweenSpawns: 0.5

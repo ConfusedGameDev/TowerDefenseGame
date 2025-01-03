@@ -312,12 +312,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3006696364441233040}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.186, z: -0.012}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.18599999, z: -0.012000086}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 681854596509981374}
+  m_Father: {fileID: 4167990882826268162}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3607854604923131717
 GameObject:
@@ -453,6 +453,7 @@ GameObject:
   - component: {fileID: 2091283703640113492}
   - component: {fileID: 2978465780274420237}
   - component: {fileID: 9063458437936226038}
+  - component: {fileID: 1479691187809630091}
   m_Layer: 7
   m_Name: BasicEnemy
   m_TagString: Untagged
@@ -474,7 +475,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4167990882826268162}
-  - {fileID: 3145521612152662811}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!195 &6594167562006952929
@@ -516,6 +516,7 @@ MonoBehaviour:
   attackDamage: 3
   deadDelay: 0.2
   enemyParent: {fileID: 0}
+  enemyType: 0
   <maxHealth>k__BackingField: 10
   onHitFX: {fileID: 0}
   totalDistance: 0
@@ -568,6 +569,23 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.4471057, y: 0.48856887, z: 0.42289242}
   m_Center: {x: -0.012921989, y: 0.14428444, z: 0.022049367}
+--- !u!114 &1479691187809630091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5345263200457073268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18d442aee3924714daa49db3282151ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationSpeed: 25
+  GroundLayerMask:
+    serializedVersion: 2
+    m_Bits: 3072
+  visuals: {fileID: 4167990882826268162}
 --- !u!1 &9163094724160671231
 GameObject:
   m_ObjectHideFlags: 0
@@ -598,5 +616,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2932783613571794448}
+  - {fileID: 3145521612152662811}
   m_Father: {fileID: 681854596509981374}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
